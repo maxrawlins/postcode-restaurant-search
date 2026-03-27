@@ -1,7 +1,21 @@
 import { useState } from "react";
 
+
+type Restaurant = {
+  name: string;
+  cuisines: string[];
+  rating: number;
+  address: string;
+};
+
+
+
+
 function App() {
   const [postcode, setPostcode] = useState("");
+
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+
 
   // submit button handler
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,8 +41,16 @@ function App() {
 
       // parses json response and logs response to console
       const data = await response.json();
-      console.log(data);
 
+      // takes first 10 restaurants returned and maps them to the restaurant type and stores them in an array
+      const mappedRestaurants: Restaurant[] = data.restaurants.slice(0, 10).map((restaurant: any) => ({
+        name: restaurant.name,
+        cuisines: restaurant.cuisines.map((cuisine: any) => cuisine.name),
+        rating: restaurant.rating.starRating,
+        address: `${restaurant.address.firstLine}, ${restaurant.address.city}, ${restaurant.address.postalCode}`,
+      }));
+
+      setRestaurants(mappedRestaurants);
     } catch (error) {
       console.log(error)
     }
@@ -52,8 +74,20 @@ function App() {
 
       <section>
         <h2>Results</h2>
-
+        {restaurants.length === 0 ? (
+          <p>No restaurants found</p>
+        ) : (
+          restaurants.map((restaurant) => (
+            <article key={`${restaurant.name}-${restaurant.address}`}>
+              <h3>{restaurant.name}</h3>
+              <p><strong>Cuisines:</strong> {restaurant.cuisines.join(", ")}</p>
+              <p><strong>Rating:</strong> {restaurant.rating}</p>
+              <p><strong>Address:</strong> {restaurant.address}</p>
+            </article>
+          ))
+        )}
       </section>
+
     </main>
   );
 }
