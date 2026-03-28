@@ -12,6 +12,9 @@ type Restaurant = {
 
 
 function App() {
+  //uk postcode regex accounting for the GIR 0AA special case
+  const postcodeRegex = /^(GIR 0AA|((([A-Z][0-9]{1,2})|([A-Z][A-HJ-Y][0-9]{1,2})|([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])) [0-9][A-Z]{2}))$/;
+
   const [postcode, setPostcode] = useState("");
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -25,13 +28,24 @@ function App() {
     // prevents page refresh
     e.preventDefault();
 
-    // removes spaces from postcode and checks field not empty
-    const cleanedPostcode = postcode.trim().replaceAll(" ", "");
-    if (!cleanedPostcode) {
+    // removes whitespace form start and end of postcode
+    const trimmedPostcode = postcode.trim().toUpperCase();
+
+    // check if empty
+    if (!trimmedPostcode) {
       setErrorMessage("Please enter a postcode.");
       setHasSearched(false);
       return;
     }
+    // validate the postcode input against the regex
+    if (!postcodeRegex.test(trimmedPostcode)) {
+      setErrorMessage("Please enter a valid UK postcode.");
+      setHasSearched(false);
+      return;
+    }
+
+    //remove spaces in postcode
+    const cleanedPostcode = trimmedPostcode.replaceAll(" ", "");
 
     setIsLoading(true);
     setErrorMessage("");
@@ -91,6 +105,10 @@ function App() {
 
         {isLoading && <p>Loading restaurants...</p>}
 
+        {!hasSearched && !errorMessage && !isLoading && (
+          <p>Enter a postcode to search for restaurants.</p>
+        )}
+        
         {hasSearched && !isLoading && restaurants.length === 0 && !errorMessage && (
           <p>No restaurants found.</p>
         )}
