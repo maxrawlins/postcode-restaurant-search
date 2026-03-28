@@ -16,6 +16,9 @@ function App() {
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
 
   // submit button handler
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,8 +28,14 @@ function App() {
     // removes spaces from postcode and checks field not empty
     const cleanedPostcode = postcode.trim().replaceAll(" ", "");
     if (!cleanedPostcode) {
+      setErrorMessage("Please enter a postcode.");
+      setHasSearched(false);
       return;
     }
+
+    setIsLoading(true);
+    setErrorMessage("");
+    setHasSearched(true);
 
     try {
 
@@ -52,7 +61,10 @@ function App() {
 
       setRestaurants(mappedRestaurants);
     } catch (error) {
-      console.log(error)
+      setRestaurants([]);
+      setErrorMessage("Unable to fetch restaurant data. Please try again!");
+    } finally {
+      setIsLoading(false);
     }
 
   };
@@ -74,9 +86,16 @@ function App() {
 
       <section>
         <h2>Results</h2>
-        {restaurants.length === 0 ? (
-          <p>No restaurants found</p>
-        ) : (
+
+        {errorMessage && <p>{errorMessage}</p>}
+
+        {isLoading && <p>Loading restaurants...</p>}
+
+        {hasSearched && !isLoading && restaurants.length === 0 && !errorMessage && (
+          <p>No restaurants found.</p>
+        )}
+
+        {!isLoading &&
           restaurants.map((restaurant) => (
             <article key={`${restaurant.name}-${restaurant.address}`}>
               <h3>{restaurant.name}</h3>
@@ -84,8 +103,7 @@ function App() {
               <p><strong>Rating:</strong> {restaurant.rating}</p>
               <p><strong>Address:</strong> {restaurant.address}</p>
             </article>
-          ))
-        )}
+          ))}
       </section>
 
     </main>
