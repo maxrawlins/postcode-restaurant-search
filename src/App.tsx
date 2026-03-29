@@ -72,21 +72,28 @@ function App() {
   };
 
   return (
-    <main>
-      <h1>Postcode Restaurant Search</h1>
+    <main className="app">
+      <header className="app__header">
+        <h1 className="app__title">Postcode Restaurant Search</h1>
+        <p className="app__description">
+          Search for restaurants by UK postcode
+        </p>
+      </header>
 
-      <p>Search for restaurants by UK postcode</p>
-
-      <form onSubmit={handleSubmit}>
-        <input type="text"
+      <form className="search-form" onSubmit={handleSubmit}>
+        <input
+          className="search-input"
+          type="text"
           placeholder="Enter a UK postcode"
           value={postcode}
           onChange={(e) => setPostcode(e.target.value)}
         />
-        <button type="submit">Search</button>
+        <button className="search-button" type="submit">
+          Search
+        </button>
       </form>
 
-      <section>
+      <section className="results">
         <h2>Results</h2>
 
         {errorMessage && <p>{errorMessage}</p>}
@@ -103,7 +110,10 @@ function App() {
 
         {!isLoading &&
           restaurants.map((restaurant) => (
-            <article key={`${restaurant.name}-${restaurant.address}`}>
+            <article
+              className="restaurant-card"
+              key={`${restaurant.name}-${restaurant.address}`}
+            >
               <h3>{restaurant.name}</h3>
               <p><strong>Cuisines:</strong> {restaurant.cuisines.join(", ")}</p>
               <p><strong>Rating:</strong> {restaurant.rating}</p>
@@ -111,7 +121,6 @@ function App() {
             </article>
           ))}
       </section>
-
     </main>
   );
 }
