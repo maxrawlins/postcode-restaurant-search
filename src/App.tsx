@@ -109,39 +109,42 @@ function App() {
           <p>No restaurants found.</p>
         )}
 
-        {!isLoading &&
-          restaurants.map((restaurant) => (
-            <article
-              className="restaurant-card"
-              key={`${restaurant.name}-${restaurant.address}`}
-            >
-              <div className="restaurant-card__header">
-                <h3 className="restaurant-card__title">{restaurant.name}</h3>
-                <span
-                  className="rating-badge"
-                  style={{ backgroundColor: getRatingColor(restaurant.rating) }}
-                >
-                  {restaurant.rating}
-                </span>
-              </div>
+        {!isLoading && (
+          <div className="restaurant-grid">
+            {restaurants.map((restaurant) => (
+              <article
+                className="restaurant-card"
+                key={`${restaurant.name}-${restaurant.address}`}
+              >
+                <div className="restaurant-card__header">
+                  <h3 className="restaurant-card__title">{restaurant.name}</h3>
+                  <span
+                    className="rating-badge"
+                    style={{ backgroundColor: getRatingColor(restaurant.rating) }}
+                  >
+                    {restaurant.rating}
+                  </span>
+                </div>
 
-              <div className="cuisine-tags">
-                {restaurant.cuisines.length > 0 ? (
-                  restaurant.cuisines.map((cuisine) => (
-                    <span className="cuisine-tag" key={cuisine}>
-                      {cuisine}
-                    </span>
-                  ))
-                ) : (
-                  <span className="cuisine-tag">Not available</span>
-                )}
-              </div>
+                <div className="cuisine-tags">
+                  {restaurant.cuisines.length > 0 ? (
+                    restaurant.cuisines.map((cuisine) => (
+                      <span className="cuisine-tag" key={cuisine}>
+                        {cuisine}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="cuisine-tag">Not available</span>
+                  )}
+                </div>
 
-              <p className="restaurant-card__text">
-                {restaurant.address || "Not available"}
-              </p>
-            </article>
-          ))}
+                <p className="restaurant-card__text">
+                  {restaurant.address || "Not available"}
+                </p>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
