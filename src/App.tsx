@@ -1,19 +1,10 @@
 import { useState } from "react";
+import type { Restaurant } from "./types/restaurant";
 
-
-type Restaurant = {
-  name: string;
-  cuisines: string[];
-  rating: number;
-  address: string;
-};
-
-
-
+//uk postcode regex accounting for the GIR 0AA special case
+const postcodeRegex = /^(GIR 0AA|((([A-Z][0-9]{1,2})|([A-Z][A-HJ-Y][0-9]{1,2})|([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])) [0-9][A-Z]{2}))$/;
 
 function App() {
-  //uk postcode regex accounting for the GIR 0AA special case
-  const postcodeRegex = /^(GIR 0AA|((([A-Z][0-9]{1,2})|([A-Z][A-HJ-Y][0-9]{1,2})|([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])) [0-9][A-Z]{2}))$/;
 
   const [postcode, setPostcode] = useState("");
 
@@ -33,12 +24,14 @@ function App() {
 
     // check if empty
     if (!trimmedPostcode) {
+      setRestaurants([]);
       setErrorMessage("Please enter a postcode.");
       setHasSearched(false);
       return;
     }
     // validate the postcode input against the regex
     if (!postcodeRegex.test(trimmedPostcode)) {
+      setRestaurants([]);
       setErrorMessage("Please enter a valid UK postcode.");
       setHasSearched(false);
       return;
@@ -65,13 +58,8 @@ function App() {
       // parses json response and logs response to console
       const data = await response.json();
 
-      // takes first 10 restaurants returned and maps them to the restaurant type and stores them in an array
-      const mappedRestaurants: Restaurant[] = data.restaurants.slice(0, 10).map((restaurant: any) => ({
-        name: restaurant.name,
-        cuisines: restaurant.cuisines.map((cuisine: any) => cuisine.name),
-        rating: restaurant.rating.starRating,
-        address: `${restaurant.address.firstLine}, ${restaurant.address.city}, ${restaurant.address.postalCode}`,
-      }));
+      // transforms raw api data into 10 simplified restaurant objects for the ui
+      const mappedRestaurants = mapRestaurants(data.restaurants);
 
       setRestaurants(mappedRestaurants);
     } catch (error) {
@@ -108,7 +96,7 @@ function App() {
         {!hasSearched && !errorMessage && !isLoading && (
           <p>Enter a postcode to search for restaurants.</p>
         )}
-        
+
         {hasSearched && !isLoading && restaurants.length === 0 && !errorMessage && (
           <p>No restaurants found.</p>
         )}
@@ -127,6 +115,17 @@ function App() {
     </main>
   );
 }
+
+// extracts required fields (name, cuisines, rating, address) from API response and limits it to first 10 restaurants
+function mapRestaurants(restaurants: any[]): Restaurant[] {
+  return restaurants.slice(0, 10).map((restaurant: any) => ({
+    name: restaurant.name,
+    cuisines: restaurant.cuisines.map((cuisine: any) => cuisine.name),
+    rating: restaurant.rating.starRating,
+    address: `${restaurant.address.firstLine}, ${restaurant.address.city}, ${restaurant.address.postalCode}`,
+  }));
+}
+
 
 
 
