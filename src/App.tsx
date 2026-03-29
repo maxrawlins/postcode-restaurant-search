@@ -115,10 +115,15 @@ function App() {
               className="restaurant-card"
               key={`${restaurant.name}-${restaurant.address}`}
             >
-              <h3 className="restaurant-card__title">{restaurant.name}</h3>
-              <p className="restaurant-card__text">
-                <strong>Cuisines:</strong>
-              </p>
+              <div className="restaurant-card__header">
+                <h3 className="restaurant-card__title">{restaurant.name}</h3>
+                <span
+                  className="rating-badge"
+                  style={{ backgroundColor: getRatingColor(restaurant.rating) }}
+                >
+                  {restaurant.rating}
+                </span>
+              </div>
 
               <div className="cuisine-tags">
                 {restaurant.cuisines.length > 0 ? (
@@ -133,10 +138,7 @@ function App() {
               </div>
 
               <p className="restaurant-card__text">
-                <strong>Rating:</strong> {restaurant.rating}
-              </p>
-              <p className="restaurant-card__text">
-                <strong>Address:</strong> {restaurant.address || "Not available"}
+                {restaurant.address || "Not available"}
               </p>
             </article>
           ))}
@@ -153,6 +155,12 @@ function mapRestaurants(restaurants: any[]): Restaurant[] {
     rating: restaurant.rating?.starRating ?? 0,
     address: [restaurant.address?.firstLine, restaurant.address?.city, restaurant.address?.postalCode].filter(Boolean).join(", "),
   }));
+}
+
+// returns a colour based on rating value 0-5
+function getRatingColor(rating: number): string {
+  const hue = (rating / 5) * 120;
+  return `hsl(${hue}, 70%, 45%)`;
 }
 
 export default App;

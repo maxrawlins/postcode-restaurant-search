@@ -77,10 +77,6 @@ body {
 }
 
 .restaurant-card {
-  margin-bottom: 1rem;
-}
-
-.restaurant-card {
   background-color: #ffffff;
   border: 1px solid #FF8001;
   border-radius: 5px;
@@ -88,8 +84,15 @@ body {
   margin-bottom: 1rem;
 }
 
+.restaurant-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0rem;
+}
+
 .restaurant-card__title {
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.5rem 0;
   color: #FF8001;
 }
 
@@ -114,5 +117,16 @@ body {
   padding: 0.25rem 0.6rem;
   background-color: #ebebeb;
   border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.rating-badge {
+  display: inline-block;
+  min-width: 2.5rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
   font-size: 0.9rem;
 }
