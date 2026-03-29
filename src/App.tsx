@@ -55,7 +55,7 @@ function App() {
         throw new Error("Failed to fetch restaurants from back end server");
       }
 
-      // parses json response and logs response to console
+      // parses json response 
       const data = await response.json();
 
       // transforms raw api data into 10 simplified restaurant objects for the ui
@@ -107,7 +107,7 @@ function App() {
               <h3>{restaurant.name}</h3>
               <p><strong>Cuisines:</strong> {restaurant.cuisines.join(", ")}</p>
               <p><strong>Rating:</strong> {restaurant.rating}</p>
-              <p><strong>Address:</strong> {restaurant.address}</p>
+              <p><strong>Address:</strong> {restaurant.address || "Not available"}</p>
             </article>
           ))}
       </section>
@@ -119,14 +119,11 @@ function App() {
 // extracts required fields (name, cuisines, rating, address) from API response and limits it to first 10 restaurants
 function mapRestaurants(restaurants: any[]): Restaurant[] {
   return restaurants.slice(0, 10).map((restaurant: any) => ({
-    name: restaurant.name,
-    cuisines: restaurant.cuisines.map((cuisine: any) => cuisine.name),
-    rating: restaurant.rating.starRating,
-    address: `${restaurant.address.firstLine}, ${restaurant.address.city}, ${restaurant.address.postalCode}`,
+    name: restaurant.name ?? "Unknown restaurant",
+    cuisines: restaurant.cuisines?.map((cuisine: any) => cuisine.name) ?? [],
+    rating: restaurant.rating?.starRating ?? 0,
+    address: [restaurant.address?.firstLine, restaurant.address?.city, restaurant.address?.postalCode].filter(Boolean).join(", "),
   }));
 }
-
-
-
 
 export default App;
