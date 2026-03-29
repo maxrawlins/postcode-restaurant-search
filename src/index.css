@@ -78,3 +78,24 @@ body {
 .restaurant-card {
   margin-bottom: 1rem;
 }
+
+.restaurant-card {
+  background-color: #ffffff;
+  border: 1px solid #FF8001;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.restaurant-card__title {
+  margin: 0 0 0.75rem 0;
+  color: #FF8001;
+}
+
+.restaurant-card__text {
+  margin: 0 0 0.5rem 0;
+}
+
+.restaurant-card__text:last-child {
+  margin-bottom: 0;
+}

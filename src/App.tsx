@@ -62,6 +62,7 @@ function App() {
       const mappedRestaurants = mapRestaurants(data.restaurants);
 
       setRestaurants(mappedRestaurants);
+      
     } catch (error) {
       setRestaurants([]);
       setErrorMessage("Unable to fetch restaurant data. Please try again!");
@@ -114,10 +115,16 @@ function App() {
               className="restaurant-card"
               key={`${restaurant.name}-${restaurant.address}`}
             >
-              <h3>{restaurant.name}</h3>
-              <p><strong>Cuisines:</strong> {restaurant.cuisines.join(", ")}</p>
-              <p><strong>Rating:</strong> {restaurant.rating}</p>
-              <p><strong>Address:</strong> {restaurant.address || "Not available"}</p>
+              <h3 className="restaurant-card__title">{restaurant.name}</h3>
+              <p className="restaurant-card__text">
+                <strong>Cuisines:</strong> {restaurant.cuisines.join(", ")}
+              </p>
+              <p className="restaurant-card__text">
+                <strong>Rating:</strong> {restaurant.rating}
+              </p>
+              <p className="restaurant-card__text">
+                <strong>Address:</strong> {restaurant.address || "Not available"}
+              </p>
             </article>
           ))}
       </section>
