@@ -139,7 +139,7 @@ function App() {
                 </div>
 
                 <p className="restaurant-card__text">
-                  {restaurant.address || "Not available"}
+                  📍 {restaurant.address || "Not available"}
                 </p>
               </article>
             ))}

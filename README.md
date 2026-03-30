@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+# Postcode Restaurant Search
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application that allows users to search for restaurants by entering UK postcodes.
 
-Currently, two official plugins are available:
+The app fetches restaurant data from the Just Eat API and displays the first 10 results (name, cuisines, rating, and address).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+-   React
+-   TypeScript
+-   Vite
+-   Node.js
+-   Express
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## How to Run
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 1. Clone the repository
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/maxrawlins/postcode-restaurant-search
+cd postcode-restaurant-search
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### 3. Start the backend server
+
+```bash
+npm run server
+```
+
+The server will run on http://localhost:3001
+
+### 4. Start the frontend
+
+```bash
+npm run dev
+```
+
+### 5. Open the app
+
+Go to http://localhost:5173
+
+---
+
+## Features
+
+-   Search for restaurants by UK postcodes
+-   Postcode validation using regex
+-   Displays:
+    -   Name
+    -   Cuisines
+    -   Rating (as a number)
+    -   Address
+-   Shows first 10 restaurants returned by the API
+-   Displayed as cards on a grid layout
+-   Colour-coded rating badges
+
+---
+
+## Key Decisions
+
+-   A backend proxy (Express server) was used to avoid CORS issues when calling the external API from the browser.
+-   Postcode validation is handled on the frontend to prevent unnecessary API calls.
+-   API data is mapped into a simplified structure before rendering to keep the UI clean and maintainable.
+-   Defensive coding was used to handle missing or undefined API fields.
+
+---
+
+## Assumptions
+
+-   User is based in the UK.
+-   The application should return the first 10 restaurants provided by the API, as specified in the brief, rather than applying any new sorting or filtering logic.
+-   The API response structure remains the same.
+-   If restaurant data fields are missing, the fallback values (e.g. "Not available") are acceptable.
+-   Ratings will always be between 0 and 5.
+
+---
+
+## Improvements
+
+-   Improve accessibility for users such as people who struggle with vision
+-   Add a ranking algorithm that combines distance from the user's postcode and restaurant rating to determine the order restaurants are shown
+-   Add loading skeleton UI instead of text
+-   Cache previous search results to avoid repeated API calls for the same postcode
+-   Deploy the application via vercel, netlify etc
