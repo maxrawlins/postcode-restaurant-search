@@ -51,6 +51,16 @@ Go to http://localhost:5173
 
 ---
 
+## How to Run Tests
+
+### Run all tests
+
+```bash
+npm run test
+```
+
+---
+
 ## Features
 
 -   Search for restaurants by UK postcodes

@@ -1,14 +1,19 @@
 import express from "express";
 import cors from "cors";
+import type { Request, Response } from "express";
 
-const app = express();
+export const app = express();
 const PORT = 3001;
 
 // enables CORS so frontend can call server
 app.use(cors());
 
+type PostcodeParams = {
+    postcode: string;
+};
+
 // route to fetch restaurant data by postcode
-app.get("/api/restaurants/:postcode", async (req, res) => {
+export const getRestaurantsByPostcode = async (req: Request<PostcodeParams>, res: Response) => {
 
     // cleans the postcode (backend validation)
     const postcode = req.params.postcode.trim().replaceAll(" ", "");
@@ -38,8 +43,12 @@ app.get("/api/restaurants/:postcode", async (req, res) => {
             error: "Something went wrong while fetching data from the API.",
         });
     }
-});
+};
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+app.get("/api/restaurants/:postcode", getRestaurantsByPostcode);
+
+if (process.env.VITEST !== "true") {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
